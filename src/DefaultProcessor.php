@@ -2,8 +2,12 @@
 
 namespace Amit\Mc;
 
+use Amit\Mc\Traits\ContainsLinkTrait;
+
 class DefaultProcessor implements ConversionInterface
 {
+    use ContainsLinkTrait;
+
     public static function is(string $input): bool
     {
         return preg_match('/^.?/$', $input);
@@ -11,20 +15,7 @@ class DefaultProcessor implements ConversionInterface
 
     public function process(string $input): string
     {
-        $parts = preg_split(Link::PATTERN, $input);
-        $output = "";
-        if (count($parts) === 1) {
-            $output = $parts[0];
-        } else {
-            preg_match_all(Link::PATTERN, $input, $matches);
-            $link = new Link();
-            foreach ($parts as $index => $p) {
-                $output .= $p;
-                if (isset($matches[$index])) {
-                    $output .= $link->process((string)$matches[$index]);
-                }
-            }
-        }
+        $output = $this->getOutputWithLink($input);
 
         return "<p>$output</p>";
     }

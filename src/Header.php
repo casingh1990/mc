@@ -2,8 +2,12 @@
 
 namespace Amit\Mc;
 
+use Amit\Mc\Traits\ContainsLinkTrait;
+
 class Header implements ConversionInterface
 {
+    use ContainsLinkTrait;
+
     public static function is(string $input): bool
     {
         return preg_match('/^#? .?/', $input);
@@ -16,6 +20,6 @@ class Header implements ConversionInterface
             $i++;
         }
 
-        return "<h$i>" . substr($input, $i) . "<h$i>";
+        return "<h$i>" . $this->getOutputWithLink(substr($input, $i)) . "<h$i>";
     }
 }
