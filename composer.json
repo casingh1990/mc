@@ -5,8 +5,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Amit\\Mc\\": "src/",
-            "Amit\\Mc\\": "tests/"
+            "Amit\\Mc\\": "src/"
         }
     },
     "authors": [
