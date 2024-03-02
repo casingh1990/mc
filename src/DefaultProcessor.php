@@ -10,13 +10,15 @@ class DefaultProcessor implements ConversionInterface
 
     public static function is(string $input): bool
     {
-        return preg_match('/^.?/$', $input);
+        return preg_match('/^.+/$', $input);
     }
 
     public function process(string $input): string
     {
         $output = $this->getOutputWithLink($input);
-
-        return "<p>$output</p>";
+        if ($output) {
+            return "<p>$output</p>\n";
+        }
+        return $output;
     }
 }

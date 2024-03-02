@@ -15,8 +15,9 @@ class Link implements ConversionInterface
     {
         preg_match_all(self::PATTERN, $input, $parts);
 
-        return <<<link
-        <a href="{$parts[1]}">$parts[1]</a>
-link;
+        $href = $parts[2][0];
+        $title = $parts[1][0];
+
+        return '<a href="' . $href . '">' . $title . '</a>';
     }
 }

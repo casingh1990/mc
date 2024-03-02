@@ -20,6 +20,6 @@ class Header implements ConversionInterface
             $i++;
         }
 
-        return "<h$i>" . $this->getOutputWithLink(substr($input, $i)) . "<h$i>";
+        return "<h$i>" . $this->getOutputWithLink(substr($input, $i)) . "</h$i>\n";
     }
 }
