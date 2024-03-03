@@ -2,7 +2,7 @@
 
 namespace Amit\Mc\Parsers;
 
-class FileParser extends AbstractParser
+class StreamParser extends AbstractParser
 {
 
     function __construct(

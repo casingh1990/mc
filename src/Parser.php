@@ -2,8 +2,6 @@
 
 namespace Amit\Mc;
 
-use Amit\Mc\Parsers\StringParser;
-
 class Parser
 {
     /**

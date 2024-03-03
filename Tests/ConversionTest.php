@@ -3,10 +3,9 @@
 namespace Tests;
 
 use Amit\Mc\Parser;
-use Amit\Mc\Parsers\FileParser;
+use Amit\Mc\Parsers\StreamParser;
 use Amit\Mc\Parsers\StringParser;
 use PHPUnit\Framework\TestCase;
-
 
 /**
  * @uses Parser
@@ -59,7 +58,7 @@ class ConversionTest extends TestCase {
                 $input = fopen($inputFile, 'r');
                 $tmp = fopen($outputFile, 'w+');
 
-                $fileParser = new FileParser($input, $tmp);
+                $fileParser = new StreamParser($input, $tmp);
                 $fileParser->parse($input, $tmp);
                 
                 fseek($tmp, 0);
