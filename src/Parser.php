@@ -22,17 +22,32 @@ class Parser
     /**
      * Use this to parse a full md file contents at a time
      * 
-     * @todo
-     * Note: because of the limited time available there is a missing edge case. This treats each "general text" line as a separate paragraph
-     * To resolve this, we need to keep track of the current and previous line(s)
-     * Only convert to a paragraph when the next line is empty
      */
     public function parseString(string $input): string
     {
         $lines = preg_split("/\r\n|\n|\r/", $input);
         $output = '';
+        $p = false;
+        $last = '';
         foreach ($lines as $line) {
-            $output .= $this->parseLine($line);
+            $line = trim($line);
+
+            if ($line === "" && $p) {
+                $output .= $this->parseLine($last);
+                $last = "";
+            }
+
+            if (Header::is($line)) {
+                $output .= $this->parseLine($line);
+            } else {
+                $last .= " $line";
+            }
+
+            $p = DefaultProcessor::is($line) && !Header::is($line);
+        }
+
+        if ($last !== '') {
+            $output .= $this->parseLine($last);
         }
 
         return $output;

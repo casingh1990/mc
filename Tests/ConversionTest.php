@@ -79,11 +79,31 @@ class ConversionTest extends TestCase {
 ###### Header 6
 
         This is a paragraph [with an inline link](http://google.com). Neat, eh?
+
 Input;
         $expected = <<<Expected
 <h4>Another Header</h4>
 <h6>Header 6</h6>
 <p>This is a paragraph <a href="http://google.com">with an inline link</a> . Neat, eh?</p>
+
+Expected;
+        $this->assertEquals($expected, $p->parseString($input));
+    }
+
+    public function testParseStringWithParagraph()
+    {
+        $p = new Parser();
+        $input = <<<Input
+#### Another Header
+###### Header 6
+
+        This is a paragraph [with an inline link](http://google.com). Neat, eh?
+        And another line to this paragraph
+Input;
+        $expected = <<<Expected
+<h4>Another Header</h4>
+<h6>Header 6</h6>
+<p>This is a paragraph <a href="http://google.com">with an inline link</a> . Neat, eh? And another line to this paragraph</p>
 
 Expected;
         $this->assertEquals($expected, $p->parseString($input));
