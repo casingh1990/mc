@@ -3,6 +3,8 @@
 namespace Tests;
 
 use Amit\Mc\Parser;
+use Amit\Mc\Parsers\FileParser;
+use Amit\Mc\Parsers\StringParser;
 use PHPUnit\Framework\TestCase;
 
 
@@ -46,7 +48,6 @@ class ConversionTest extends TestCase {
 
     public function testConversionUsingFileInput()
     {
-        $p = new Parser();
         $files = array_diff(scandir(__DIR__ . '/data/'), ['.', '..']);
         foreach($files as $f) {
             if (preg_match('/.?\.md/', $f)) {
@@ -58,7 +59,8 @@ class ConversionTest extends TestCase {
                 $input = fopen($inputFile, 'r');
                 $tmp = fopen($outputFile, 'w+');
 
-                $p->parseFile($input, $tmp);
+                $fileParser = new FileParser($input, $tmp);
+                $fileParser->parse($input, $tmp);
                 
                 fseek($tmp, 0);
                 while ($parsed = fgets($tmp)) {
@@ -74,7 +76,7 @@ class ConversionTest extends TestCase {
 
     public function testParseString()
     {
-        $p = new Parser();
+        
         $input = <<<Input
 #### Another Header
 ###### Header 6
@@ -88,12 +90,12 @@ Input;
 <p>This is a paragraph <a href="http://google.com">with an inline link</a> . Neat, eh?</p>
 
 Expected;
-        $this->assertEquals($expected, $p->parseString($input));
+        $p = new StringParser($input);
+        $this->assertEquals($expected, $p->parse($input));
     }
 
     public function testParseStringWithParagraph()
     {
-        $p = new Parser();
         $input = <<<Input
 #### Another Header
 ###### Header 6
@@ -107,7 +109,8 @@ Input;
 <p>This is a paragraph <a href="http://google.com">with an inline link</a> . Neat, eh? And another line to this paragraph</p>
 
 Expected;
-        $this->assertEquals($expected, $p->parseString($input));
+        $p = new StringParser($input);
+        $this->assertEquals($expected, $p->parse($input));
     }
 
     /**
@@ -115,8 +118,8 @@ Expected;
      */
     public function testSpecialCases($input, $expected)
     {
-        $p = new Parser();
-        $this->assertEquals($expected, $p->parseString($input));
+        $p = new StringParser($input);
+        $this->assertEquals($expected, $p->parse($input));
     }
 
     public static function dataProviderSpecialCases()
