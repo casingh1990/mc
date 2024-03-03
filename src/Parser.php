@@ -4,8 +4,19 @@ namespace Amit\Mc;
 
 class Parser
 {
-    public function parse($line) {
-        
+    /**
+     * Use this method to process the given input stream into the given output stream
+     * This is useful for large inputs
+     * parseFile
+     * @var $input input stream
+     * @var $output output stream
+     * @return void
+     */
+    public function parseFile($input, $output): void
+    {
+        while ($line = fgets($input)) {
+            fwrite($output, $this->parseLine($line));
+        }
     }
 
     public function parseLine(string $line)

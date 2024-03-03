@@ -17,11 +17,13 @@ class ConversionTest extends TestCase {
         $files = array_diff(scandir(__DIR__ . '/data/'), ['.', '..']);
         foreach($files as $f) {
             if (preg_match('/.?\.md/', $f)) {
-                $input = fopen(__DIR__ . '/data/' . $f, 'r');
+                $inputFile = __DIR__ . '/data/' . $f;
+                $outputFile = __DIR__ . '/tmp.out'; 
+                $input = fopen($inputFile, 'r');
                 $parts = explode('.', $f);
                 $output = fopen(__DIR__ . '/data/' . $parts[0] . '.html', 'r');
 
-                $tmp = fopen(__DIR__ . '/tmp.out', 'w+');
+                $tmp = fopen($outputFile, 'w+');
 
                 while ($line = fgets($input)) {
                     fwrite($tmp, $p->parseLine($line));
@@ -34,6 +36,34 @@ class ConversionTest extends TestCase {
                 }
 
                 fclose($input);
+                fclose($output);
+                fclose($tmp);
+            }
+        }
+        $this->assertTrue(true);
+    }
+
+    public function testConversionUsingFileInput()
+    {
+        $p = new Parser();
+        $files = array_diff(scandir(__DIR__ . '/data/'), ['.', '..']);
+        foreach($files as $f) {
+            if (preg_match('/.?\.md/', $f)) {
+                $inputFile = __DIR__ . '/data/' . $f;
+                $outputFile = __DIR__ . '/tmp.out'; 
+                $parts = explode('.', $f);
+                $output = fopen(__DIR__ . '/data/' . $parts[0] . '.html', 'r');
+
+                $input = fopen($inputFile, 'r');
+                $tmp = fopen($outputFile, 'w+');
+
+                $p->parseFile($input, $tmp);
+                
+                while ($parsed = fgets($tmp)) {
+                    $expected = fgets($output);
+                    $this->assertEquals($expected, $parsed);
+                }
+
                 fclose($output);
                 fclose($tmp);
             }
