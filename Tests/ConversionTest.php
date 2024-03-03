@@ -14,14 +14,15 @@ class ConversionTest extends TestCase {
     public function testConversion()
     {
         $p = new Parser();
-        $files = array_diff(scandir(__DIR__ . '/data/'), ['.', '..']);
+        $prefix = '/data_line_by_line/';
+        $files = array_diff(scandir(__DIR__ . $prefix), ['.', '..']);
         foreach($files as $f) {
             if (preg_match('/.?\.md/', $f)) {
-                $inputFile = __DIR__ . '/data/' . $f;
+                $inputFile = __DIR__ . $prefix . $f;
                 $outputFile = __DIR__ . '/tmp.out'; 
                 $input = fopen($inputFile, 'r');
                 $parts = explode('.', $f);
-                $output = fopen(__DIR__ . '/data/' . $parts[0] . '.html', 'r');
+                $output = fopen(__DIR__ . $prefix . $parts[0] . '.html', 'r');
 
                 $tmp = fopen($outputFile, 'w+');
 
@@ -59,6 +60,7 @@ class ConversionTest extends TestCase {
 
                 $p->parseFile($input, $tmp);
                 
+                fseek($tmp, 0);
                 while ($parsed = fgets($tmp)) {
                     $expected = fgets($output);
                     $this->assertEquals($expected, $parsed);
@@ -68,7 +70,6 @@ class ConversionTest extends TestCase {
                 fclose($tmp);
             }
         }
-        $this->assertTrue(true);
     }
 
     public function testParseString()

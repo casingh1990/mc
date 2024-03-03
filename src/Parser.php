@@ -14,8 +14,27 @@ class Parser
      */
     public function parseFile($input, $output): void
     {
+        $p = false;
+        $last = "";
         while ($line = fgets($input)) {
-            fwrite($output, $this->parseLine($line));
+            $line = trim($line);
+
+            if ($line === "" && $p) {
+                fwrite($output, $this->parseLine($last));
+                $last = "";
+            }
+
+            if (Header::is($line)) {
+                fwrite($output, $this->parseLine($line));
+            } else {
+                $last .= " $line";
+            }
+
+            $p = DefaultProcessor::is($line) && !Header::is($line);
+        }
+
+        if ($last !== '') {
+            fwrite($output, $this->parseLine($last));
         }
     }
 
