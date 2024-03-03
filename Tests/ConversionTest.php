@@ -76,11 +76,13 @@ class ConversionTest extends TestCase {
         $p = new Parser();
         $input = <<<Input
 #### Another Header
+###### Header 6
 
         This is a paragraph [with an inline link](http://google.com). Neat, eh?
 Input;
         $expected = <<<Expected
 <h4>Another Header</h4>
+<h6>Header 6</h6>
 <p>This is a paragraph <a href="http://google.com">with an inline link</a> . Neat, eh?</p>
 
 Expected;
