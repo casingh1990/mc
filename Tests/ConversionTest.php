@@ -109,4 +109,23 @@ Input;
 Expected;
         $this->assertEquals($expected, $p->parseString($input));
     }
+
+    /**
+     * @dataProvider dataProviderSpecialCases
+     */
+    public function testSpecialCases($input, $expected)
+    {
+        $p = new Parser();
+        $this->assertEquals($expected, $p->parseString($input));
+    }
+
+    public static function dataProviderSpecialCases()
+    {
+        return [
+            'only link' => [
+                'input' => '[with a link](http://yahoo.com)',
+                'expected' => '<p> <a href="http://yahoo.com">with a link</a> </p>' . "\n"
+            ]
+        ];
+    }
 }
