@@ -19,6 +19,20 @@ class Parser
         }
     }
 
+    /**
+     * Use this to parse a full md file contents at a time
+     */
+    public function parseString(string $input): string
+    {
+        $lines = preg_split("/\r\n|\n|\r/", $input);
+        $output = '';
+        foreach ($lines as $line) {
+            $output .= $this->parseLine($line);
+        }
+
+        return $output;
+    }
+
     public function parseLine(string $line)
     {
         return $this->getParser($line)->process($line);

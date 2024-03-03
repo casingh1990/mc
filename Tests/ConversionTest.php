@@ -70,4 +70,20 @@ class ConversionTest extends TestCase {
         }
         $this->assertTrue(true);
     }
+
+    public function testParseString()
+    {
+        $p = new Parser();
+        $input = <<<Input
+#### Another Header
+
+        This is a paragraph [with an inline link](http://google.com). Neat, eh?
+Input;
+        $expected = <<<Expected
+<h4>Another Header</h4>
+<p>This is a paragraph <a href="http://google.com">with an inline link</a> . Neat, eh?</p>
+
+Expected;
+        $this->assertEquals($expected, $p->parseString($input));
+    }
 }
