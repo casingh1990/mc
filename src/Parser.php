@@ -21,6 +21,11 @@ class Parser
 
     /**
      * Use this to parse a full md file contents at a time
+     * 
+     * @todo
+     * Note: because of the limited time available there is a missing edge case. This treats each "general text" line as a separate paragraph
+     * To resolve this, we need to keep track of the current and previous line(s)
+     * Only convert to a paragraph when the next line is empty
      */
     public function parseString(string $input): string
     {
@@ -33,6 +38,9 @@ class Parser
         return $output;
     }
 
+    /**
+     * Parses one Md line into HTML
+     */
     public function parseLine(string $line)
     {
         return $this->getParser($line)->process($line);
